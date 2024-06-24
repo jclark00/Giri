@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Modal styles */
+        #loginModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        #loginModalContent {
+            background-color: #333;
+            color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        #loginModalContent h2 {
+            font-size: 1.5em;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        #loginModalContent h3 {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        #loginModalContent input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #loginModalContent button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #loginModalContent button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal">
+        <div id="loginModalContent">
+            <h2>Welcome to <span style="font-size:1.5em;font-weight:bold;">GIRI</span></h2>
+            <h3>Please enter your username and password</h3>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="loginButton">Login</button>
+        </div>
+    </div>
+    <div>
+        <h1>    </h1>
+    </div>
+
+    </div>
+    <div>
+    <div id="controls">
+        <div>
+            <h2>Select System Class</h2>
+            <select id="system-type-select">
+                <option value="">Select System Class</option>
+            </select>
+        </div>
+        <div>
+            <h2>Select System</h2>
+            <select id="system-name-select">
+                <option value="">Select System</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <h2>Select Emitters and Count</h2>
+        <div id="emitter-name-container"></div>
+    </div>
+    <div>
+        <h3>Tolerance</h3>
+        <label>Min: <input type="number" id="min-tolerance" step="0.01"></label>
+        <label>Max: <input type="number" id="max-tolerance" step="0.01"></label>
+    </div>
+    <div id="map"></div>
+    <div id="working-csv-container">
+        <div id="working-csv-header">
+            <h2>Working CSV Preview</h2>
+            <div>
+                <button id="randomize" class="purple">Randomize Order</button>
+                <button id="clear-all" class="dark-red">Clear All</button>
+                <button id="delete-selected" class="dark-red">Delete Selected</button>
+                <button id="generate-data" class="blue-green">Generate Data</button>
+            </div>
+        </div>
+        <div id="working-csv-preview"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script src="functions.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginModal = document.getElementById('loginModal');
+            const loginButton = document.getElementById('loginButton');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            loginModal.style.display = 'block';
+
+            loginButton.addEventListener('click', function() {
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+
+                if (username === 'admin' && password === 'B@byN3t!') {
+                    loginModal.style.display = 'none';
+                } else {
+                    alert('Incorrect username or password');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

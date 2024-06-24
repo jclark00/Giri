@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+body {
+    background-color: #0d0d0d;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif, fantasy;
+    margin: 0;
+    padding: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    background-image: url('./pictures/bg2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+h1 {
+    text-align: center;
+    font-family: 'Copperplate', sans-serif;
+    font-size: 5.5em;
+    letter-spacing: 1.8em;
+    color: #ff9800;
+    text-shadow: 3px 3px 10px rgba(255, 152, 0, 0.8);
+    margin-bottom: 200px;
+}
+h2 {
+    color: #ff9800;
+    position: relative;
+    padding-bottom: 10px;
+    text-align: center;
+}
+h3 {
+    color: #ff9800;
+    position: relative;
+    padding-bottom: 10px;
+    text-align: left;
+}
+\\h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff9800;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+}
+select, button, input {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px #666;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    font-family: 'Orbitron', sans-serif;
+}
+select, input[type="number"], input[type="text"] {
+    background-color: rgba(33, 33, 33, 0.8);
+    color: #fff;
+}
+button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+button:hover {
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.6);
+}
+button:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
+}
+button.dark-red {
+    background-color: #a33;
+    color: #fff;
+}
+button.blue-green {
+    background-color: #4efccb;
+    color: #fff;
+}
+button.blue {
+    background-color: #2196F3;
+    color: #fff;
+}
+button.purple {
+    background-color: #eb5bf5;
+    color: #fff;
+}
+input[type="number"], input[type="text"] {
+    width: 60px;
+}
+input.location-input {
+    width: 150px; /* Width for location input */
+}
+#controls {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#controls div {
+    flex: 1;
+    text-align: center;
+}
+#emitter-name-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+#emitter-name-container div {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+#working-csv-container {
+    margin-top: 20px;
+}
+#working-csv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#working-csv-title {
+    flex: 1;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+#working-csv-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+#working-csv-preview {
+    background-color: rgba(33, 33, 33, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    max-height: 400px; /* Set a maximum height to the preview */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #555;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #555;
+}
+tr.selected {
+    background-color: #666;
+}
+label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.custom-div-icon {
+    display: flex;
+    align-items: center;
+}
+
+.custom-div-icon img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.custom-div-icon span {
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+}

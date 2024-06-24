@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Signature Generator</h1>
+    <div id="controls">
+        <div>
+            <h2>Select System Class</h2>
+            <select id="system-type-select">
+                <option value="">Select System Class</option>
+            </select>
+        </div>
+        <div>
+            <h2>Select System</h2>
+            <select id="system-name-select">
+                <option value="">Select System</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <h2>Select Emitters and Count</h2>
+        <div id="emitter-name-container"></div>
+    </div>
+    <div>
+        <h2>Tolerance</h2>
+        <label>Min: <input type="number" id="min-tolerance" step="0.01"></label>
+        <label>Max: <input type="number" id="max-tolerance" step="0.01"></label>
+    </div>
+    <div id="working-csv-container">
+        <div id="working-csv-header">
+            <div id="working-csv-buttons">
+                <button id="clear-all" class="dark-red">Clear All</button>
+                <button id="delete-selected" class="dark-red">Delete Selected</button>
+            </div>
+            <h2 id="working-csv-title">Working CSV Preview</h2>
+            <div>
+                <button id="map" class="blue">Map</button>
+                <button id="autofill-location" class="blue">Autofill Locations</button>
+                <button id="randomize" class="purple">Randomize Order</button>
+                <button id="generate-data" class="blue-green">Generate Data</button>
+            </div>
+        </div>
+        <div id="working-csv-preview"></div>
+    </div>
+    <div id="locations"></div>
+    <script src="data.js"></script>
+    <script src="functions.js"></script>
+</body>
+</html>
