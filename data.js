@@ -1,9 +1,10 @@
-const systemTypes = ['SAM', 'TBM', 'EW', 'EMW'];
+const systemTypes = ['SAM', 'TBM', 'EW', 'EMW', 'MARITIME'];
 const systemNames = {
     'SAM': ['RBG-6', 'RBG-15', 'BG-5', 'RBG-12'],
     'TBM': ['BG-10', 'RBG-11'],
     'EW': ['SAV'],
-    'EMW': ['JX']
+    'EMW': ['JX'],
+    'MARITIME': ['CG', 'DD', 'FF']
 };
 
 const emitters = [
@@ -41,5 +42,11 @@ const emitters = [
     { "systemType": "EW", "systemName": "SAV", "emitterName": "TOE RING", "elnot": "H1X32", "freq": "3613" },
     { "systemType": "EMW", "systemName": "JX", "emitterName": "CHECK BOOK", "elnot": "NNWI0", "freq": "1986" },
     { "systemType": "EMW", "systemName": "JX", "emitterName": "SAND GLASS", "elnot": "5KM9Z", "freq": "3247" },
-    { "systemType": "EMW", "systemName": "JX", "emitterName": "SNAIL SHELL", "elnot": "W1E5S", "freq": "278" }
+    { "systemType": "EMW", "systemName": "JX", "emitterName": "SNAIL SHELL", "elnot": "W1E5S", "freq": "278" },
+    { "systemType": "MARITIME", "systemName": "CG", "emitterName": "GOOSE", "elnot": "FD658", "freq": "1489" },
+    { "systemType": "MARITIME", "systemName": "CG", "emitterName": "GOSLING", "elnot": "FL628", "freq": "1102" },
+    { "systemType": "MARITIME", "systemName": "DD", "emitterName": "DUCK", "elnot": "FM858", "freq": "1147" },
+    { "systemType": "MARITIME", "systemName": "DD", "emitterName": "DUCKLING", "elnot": "FJ111", "freq": "3325" },
+    { "systemType": "MARITIME", "systemName": "FF", "emitterName": "PELICAN", "elnot": "FV828", "freq": "1001" },
+    { "systemType": "MARITIME", "systemName": "FF", "emitterName": "SEAGULL", "elnot": "FO665", "freq": "1247" }
 ];
