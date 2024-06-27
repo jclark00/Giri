@@ -17,6 +17,7 @@
     <div id="loadingOverlay" style="display: none;">
         <div id="loadingSpinner"></div>
         <div id="loadingMessage">Publishing data...</div>
+        <div id="messageCounter"></div>
     </div>
     
     <!-- Login Modal -->
@@ -108,11 +109,17 @@
 
             const loadingOverlay = document.getElementById('loadingOverlay');
             const loadingMessage = document.getElementById('loadingMessage');
+            const messageCounter = document.getElementById('messageCounter');
 
             function showLoadingOverlay(message) {
                 console.log('Showing loading overlay with message:', message);
                 loadingMessage.textContent = message;
+                messageCounter.textContent = '';
                 loadingOverlay.style.display = 'flex';
+            }
+
+            function updateMessageCounter(sent, total) {
+                messageCounter.textContent = `${sent} of ${total}`;
             }
 
             function hideLoadingOverlay() {
@@ -138,9 +145,14 @@
                 const delayInterval = 3000; // 3 seconds delay
                 let delay = 0;
                 const promises = [];
+                let sentMessages = 0;
+                const totalMessages = workingCSV.length + 2; // +2 for initialization and end messages
 
                 // Add initialization message
-                promises.push(sendIrcMessage('Initializing data flow from GIRI', delay));
+                promises.push(sendIrcMessage('Initializing data flow from GIRI', delay).then(() => {
+                    sentMessages++;
+                    updateMessageCounter(sentMessages, totalMessages);
+                }));
                 delay += delayInterval; // Increment delay for the next message
 
                 workingCSV.forEach(row => {
@@ -150,12 +162,18 @@
                     const [lat, lon] = row.location.split(',').map(Number);
                     const message = `${row.systemType} // ${row.systemName} // ${row.emitterName} // ${row.elnot} // ${row.freq} // ${semiMin} // ${semiMaj} // ${orientation} // ${lat.toFixed(6)},${lon.toFixed(6)}`;
 
-                    promises.push(sendIrcMessage(message, delay)); // Send message with a delay
+                    promises.push(sendIrcMessage(message, delay).then(() => {
+                        sentMessages++;
+                        updateMessageCounter(sentMessages, totalMessages);
+                    })); // Send message with a delay
                     delay += delayInterval; // Increment delay for the next message
                 });
 
                 // Add a promise to send the end message
-                promises.push(sendIrcMessage('***END OF DATA***', delay));
+                promises.push(sendIrcMessage('***END OF DATA***', delay).then(() => {
+                    sentMessages++;
+                    updateMessageCounter(sentMessages, totalMessages);
+                }));
 
                 Promise.all(promises)
                     .then(() => {
