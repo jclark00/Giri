@@ -316,7 +316,7 @@ label {
 
 #loadingSpinner {
     border: 16px solid #f3f3f3;
-    border-top: 16px solid #fa7e02;
+    border-top: 16px solid #3498db;
     border-radius: 50%;
     width: 120px;
     height: 120px;
@@ -332,4 +332,10 @@ label {
     color: #fff;
     font-size: 1.5em;
     margin-top: 20px;
+}
+
+#messageCounter {
+    color: #fff;
+    font-size: 1.2em;
+    margin-top: 10px;
 }
