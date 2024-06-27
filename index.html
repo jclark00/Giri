@@ -7,109 +7,18 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-            display: none; /* Initially hidden */
-            margin-bottom: 20px;
-        }
-
-        #map-placeholder {
-            height: 400px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(13, 13, 13, 0.8); /* Slightly transparent */
-            color: #ff9800;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 10px #ff9800;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        /* Modal styles */
-        #loginModal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
-        }
-
-        #loginModalContent {
-            background-color: #333;
-            color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border-radius: 10px;
-        }
-
-        #loginModalContent h2 {
-            font-size: 1.5em;
-            margin: 0;
-            font-weight: bold;
-        }
-
-        #loginModalContent h3 {
-            margin-top: 10px;
-            font-size: 1.2em;
-        }
-
-        #loginModalContent input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        #loginModalContent button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #loginModalContent button:hover {
-            background-color: #45a049;
-        }
-
-        .large-green-button {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            padding: 10px;
-            background-color: #3dfc03; /* Changed color */
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
     <script src="https://unpkg.com/leaflet-pip@1.1.0/leaflet-pip.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none;">
+        <div id="loadingSpinner"></div>
+        <div id="loadingMessage">Publishing data...</div>
+    </div>
+    
     <!-- Login Modal -->
     <div id="loginModal">
         <div id="loginModalContent">
@@ -123,7 +32,6 @@
     <div>
         <h1></h1>
     </div>
-
     <div>
         <div id="controls">
             <div>
@@ -158,7 +66,7 @@
                 <h2>Working CSV Preview</h2>
                 <div>
                     <button id="randomize" class="purple">Randomize Order</button>
-                    <button id="cluster-selected" class="purple">Cluster Selected</button> <!-- Added button -->
+                    <button id="cluster-selected" class="purple">Cluster Selected</button>
                     <button id="clear-all" class="dark-red">Clear All</button>
                     <button id="delete-selected" class="dark-red">Delete Selected</button>
                     <button id="generate-data" class="blue-green">Generate Data</button>
@@ -197,6 +105,74 @@
                 mapDiv.style.display = 'block';
                 initializeMap();
             });
+
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            function showLoadingOverlay(message) {
+                console.log('Showing loading overlay with message:', message);
+                loadingMessage.textContent = message;
+                loadingOverlay.style.display = 'flex';
+            }
+
+            function hideLoadingOverlay() {
+                console.log('Hiding loading overlay');
+                loadingOverlay.style.display = 'none';
+            }
+
+            async function sendIrcMessage(message, delay) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        console.log(`Message sent: ${message}`);
+                        resolve();
+                    }, delay);
+                });
+            }
+
+            async function handlePlayData() {
+                showLoadingOverlay('Publishing data...');
+
+                const minTolerance = parseFloat(document.getElementById('min-tolerance').value);
+                const maxTolerance = parseFloat(document.getElementById('max-tolerance').value);
+
+                const delayInterval = 3000; // 3 seconds delay
+                let delay = 0;
+                const promises = [];
+
+                // Add initialization message
+                promises.push(sendIrcMessage('Initializing data flow from GIRI', delay));
+                delay += delayInterval; // Increment delay for the next message
+
+                workingCSV.forEach(row => {
+                    const semiMaj = (Math.random() * (maxTolerance - minTolerance) + minTolerance).toFixed(2);
+                    const semiMin = (Math.random() * 0.75 * semiMaj).toFixed(2);
+                    const orientation = Math.floor(Math.random() * 180) + 1;
+                    const [lat, lon] = row.location.split(',').map(Number);
+                    const message = `${row.systemType} // ${row.systemName} // ${row.emitterName} // ${row.elnot} // ${row.freq} // ${semiMin} // ${semiMaj} // ${orientation} // ${lat.toFixed(6)},${lon.toFixed(6)}`;
+
+                    promises.push(sendIrcMessage(message, delay)); // Send message with a delay
+                    delay += delayInterval; // Increment delay for the next message
+                });
+
+                // Add a promise to send the end message
+                promises.push(sendIrcMessage('***END OF DATA***', delay));
+
+                Promise.all(promises)
+                    .then(() => {
+                        console.log('All messages sent');
+                        loadingMessage.textContent = 'Finished';
+                        setTimeout(() => {
+                            hideLoadingOverlay();
+                            console.log('Overlay hidden');
+                        }, 2000); // Hide the overlay after 2 seconds
+                    })
+                    .catch(error => {
+                        console.error('Error sending messages:', error);
+                        hideLoadingOverlay(); // Ensure the overlay is hidden in case of error
+                    });
+            }
+
+            document.getElementById('play-data').addEventListener('click', handlePlayData);
         });
     </script>
 </body>
