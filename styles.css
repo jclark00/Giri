@@ -171,3 +171,16 @@ label {
     font-size: 12px;
     white-space: nowrap;
 }
+.large-green-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #3dfc03;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
