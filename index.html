@@ -6,10 +6,27 @@
     <title>CSV Generator</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
         #map {
             height: 400px;
             width: 100%;
+            display: none; /* Initially hidden */
+            margin-bottom: 20px;
+        }
+
+        #map-placeholder {
+            height: 400px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(13, 13, 13, 0.8); /* Slightly transparent */
+            color: #ff9800;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px #ff9800;
+            cursor: pointer;
             margin-bottom: 20px;
         }
 
@@ -72,7 +89,25 @@
         #loginModalContent button:hover {
             background-color: #45a049;
         }
+
+        .large-green-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #3dfc03; /* Changed color */
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    <script src="https://unpkg.com/leaflet-pip@1.1.0/leaflet-pip.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 </head>
 <body>
     <!-- Login Modal -->
@@ -86,48 +121,52 @@
         </div>
     </div>
     <div>
-        <h1>    </h1>
+        <h1></h1>
     </div>
 
-    </div>
     <div>
-    <div id="controls">
-        <div>
-            <h2>Select System Class</h2>
-            <select id="system-type-select">
-                <option value="">Select System Class</option>
-            </select>
-        </div>
-        <div>
-            <h2>Select System</h2>
-            <select id="system-name-select">
-                <option value="">Select System</option>
-            </select>
-        </div>
-    </div>
-    <div>
-        <h2>Select Emitters and Count</h2>
-        <div id="emitter-name-container"></div>
-    </div>
-    <div>
-        <h3>Tolerance</h3>
-        <label>Min: <input type="number" id="min-tolerance" step="0.01"></label>
-        <label>Max: <input type="number" id="max-tolerance" step="0.01"></label>
-    </div>
-    <div id="map"></div>
-    <div id="working-csv-container">
-        <div id="working-csv-header">
-            <h2>Working CSV Preview</h2>
+        <div id="controls">
             <div>
-                <button id="randomize" class="purple">Randomize Order</button>
-                <button id="clear-all" class="dark-red">Clear All</button>
-                <button id="delete-selected" class="dark-red">Delete Selected</button>
-                <button id="generate-data" class="blue-green">Generate Data</button>
+                <h2>Select System Class</h2>
+                <select id="system-type-select">
+                    <option value="">Select System Class</option>
+                </select>
+            </div>
+            <div>
+                <h2>Select System</h2>
+                <select id="system-name-select">
+                    <option value="">Select System</option>
+                </select>
             </div>
         </div>
-        <div id="working-csv-preview"></div>
+        <div>
+            <h2>Select Emitters and Count</h2>
+            <div id="emitter-name-container"></div>
+        </div>
+        <div>
+            <h3>Tolerance</h3>
+            <label>Min: <input type="number" id="min-tolerance" step="0.01"></label>
+            <label>Max: <input type="number" id="max-tolerance" step="0.01"></label>
+        </div>
+        <div>
+            <button id="play-data" class="large-green-button">Play Data</button>
+        </div>
+        <div id="map-placeholder">Click to draw AOI</div>
+        <div id="map"></div>
+        <div id="working-csv-container">
+            <div id="working-csv-header">
+                <h2>Working CSV Preview</h2>
+                <div>
+                    <button id="randomize" class="purple">Randomize Order</button>
+                    <button id="cluster-selected" class="purple">Cluster Selected</button> <!-- Added button -->
+                    <button id="clear-all" class="dark-red">Clear All</button>
+                    <button id="delete-selected" class="dark-red">Delete Selected</button>
+                    <button id="generate-data" class="blue-green">Generate Data</button>
+                </div>
+            </div>
+            <div id="working-csv-preview"></div>
+        </div>
     </div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="data.js"></script>
     <script src="functions.js"></script>
     <script>
@@ -143,11 +182,20 @@
                 const username = usernameInput.value;
                 const password = passwordInput.value;
 
-                if (username === 'admin' && password === 'B@byN3t!') {
+                if (username === 'admin' && password === 'admin') {
                     loginModal.style.display = 'none';
                 } else {
                     alert('Incorrect username or password');
                 }
+            });
+
+            const mapPlaceholder = document.getElementById('map-placeholder');
+            const mapDiv = document.getElementById('map');
+
+            mapPlaceholder.addEventListener('click', function() {
+                mapPlaceholder.style.display = 'none';
+                mapDiv.style.display = 'block';
+                initializeMap();
             });
         });
     </script>
